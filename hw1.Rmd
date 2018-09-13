@@ -68,5 +68,33 @@ tibl_as_num_log_char_num <-
   print( tibl_as_num_log_char_num )
 
 ```
-The logical TRUEs have been converted to 1s and the logical 0s have been
-converted to 
+The logical TRUEs have been converted to 1s and the logical FALSEs have been
+converted to 0s. The letters are completely incompatible and result with 
+empty values (NAs). The logical vector can be converted to numeric...
+so this is something to watch out for and avoid if not intended.
+
+Converting character variable from character to factor to numeric:
+```{r}
+as.numeric(
+as.factor(tibl_as_num_log_char_num$first_ten_letters) 
+)
+```
+This doesn't work. Why?
+Converting the character vecotr to a factor is shown below, along with 
+a conversion for the first element in the vector.
+```{r}
+
+as.factor( tibl_as_num_log_char_num$first_ten_letters ) 
+as.factor( tibl_as_num_log_char_num$first_ten_letters[1] )
+class(
+  as.factor( tibl_as_num_log_char_num$first_ten_letters[1] ) 
+  )
+
+```
+This generates a factor with <NA>s and 0 levels... it is not possible
+to convert <NA> to 
+Converting factor variable from factor to character to numeric:
+```{r}
+
+```
+
