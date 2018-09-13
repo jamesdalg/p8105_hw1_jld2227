@@ -22,27 +22,41 @@ greater_than_two_factor= as.factor(logical_greater_than_two)
 )
 head(rand10_greaterthan2_letters_factor_tibl)
 ```
-Now, we'll attempt to take the mean of all the columns... we'll note that some of these columns are not numeric and therefore a mean would be difficult to accomplish.
+Now, we'll attempt to take the mean of all the columns... we'll note that some
+of these columns are
+not numeric and therefore a mean would be difficult to calculate.
 ```{r means}
-#taking the mean of every column won't work because you can't take the mean of a nonnumeric column.
- tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,mean)
+#taking the mean of every column won't work because 
+#you can't take the mean of a nonnumeric column.
+ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl, mean)
+mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )
+mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )
+mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
+mean( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
+#print(tibl_means)
 ```
+You can actually take the mean of a factor, but it's something to avoid. It is
+possible to have a factor that looks like a list of numbers that is not
+a numeric variable, Using some if logic, we find we can take just the means
+of the columns that are amenable to means.
 
 ```{r means_with_check}
  #putting in a check to determine if it's numeric.
-tibl_means <- sapply(rand10_greaterthan2_letters_factor_tibl,
+tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
                      function(x)
-                     if (is.numeric(x)) {
-                     return(mean(x))
+                     if ( is.numeric( x ) ) {
+                     return( 
+                       mean( x )
+                       )
                      } else {
-                     return("Incompatible type for mean")
+                     return( "Incompatible type for mean" )
                      })
- 
+ print(tibl_means)
 ```
 Converting the logical, character, and factor columns to numeric:
 ```{r,eval=F}
 tibl_as_num_log_char_num <-
-  sapply(rand10_greaterthan2_letters_factor_tibl,
+  sapply( rand10_greaterthan2_letters_factor_tibl,
   function(x)
   if (is.logical(x) |
   is.character(x) |
@@ -51,17 +65,8 @@ tibl_as_num_log_char_num <-
   } else {
   return(NULL)
   })
-  
+  print( tibl_as_num_log_char_num )
 
 ```
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+The logical TRUEs have been converted to 1s and the logical 0s have been
+converted to 
