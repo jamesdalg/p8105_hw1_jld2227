@@ -14,10 +14,50 @@ knitr::opts_chunk$set(echo = TRUE)
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
 When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+what didn't work:
+letters(1:5)
+"letters" is a built in vector rather than a function.
+```{r create_tibble}
+rand10_greaterthan2_letters_factor_tibl <- tibble::tibble( ten_random_0_to_5 = runif(n = 10, min = 0, max=5),
+logical_greater_than_two = ten_random_0_to_5 > 2,
+first_ten_letters = letters[ 1:10 ],
+greater_than_two_factor= as.factor(logical_greater_than_two)
 
-```{r cars}
-summary(cars)
+)
 ```
+
+```{r means}
+#taking the mean of every column won't work because you can't take the mean of a nonnumeric column.
+ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,mean)
+ #putting in a check to determine if it's numeric.
+ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
+                      function(x) if( 
+                        is.numeric(x) ) {
+                        return(
+                          mean(x) 
+                                ) } else {
+                          return("Incompatible type for mean")
+                        }
+                      )
+ 
+```
+Converting the logical, character, and factor columns to numeric:
+```{r,eval=F}
+ tibl_as_num <- sapply( rand10_greaterthan2_letters_factor_tibl,
+                      function(x) if( 
+                        is.logical(x) |
+                        is.character(x) | 
+                        is.factor(x) ) {
+                        return(
+                        as.numeric(x) )
+                        } else {
+                          return(NULL)
+                        }
+                      )
+
+
+```
+
 
 ## Including Plots
 
