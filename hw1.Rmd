@@ -116,3 +116,57 @@ quite know how to convert "TRUE" into a number. Each of the attempted
 conversions turn into missing values (NAs).
 
 #Problem 2
+Following directions from the assignment, I will create a data frame that has
+the following vectors as columns:
+*two numeric variables, x and y,
+**both taken from a standard normal distribution
+**(standard signifies mean 0, sd 1),
+*logical vector denoting x + y > 0
+*the logical vector coerced into a numeric vector
+*the logical vector coerced into a factor vector
+
+
+```{r create_second_tibble}
+tibl_rnorm_1k_x_y_gt_0_num_fac <- tibble::tibble(
+  x = rnorm( n = 1000, mean = 0, sd = 1 ),
+  y = rnorm( n = 1000, mean = 0, sd = 1 ),
+  gt_0 = x + y > 0,
+  gt_0_num = as.numeric( gt_0 ),
+  gt_0_fac = as.factor( gt_0 )
+)
+head( tibl_rnorm_1k_x_y_gt_0_num_fac )
+```
+
+To illustrate the size of the dataset, the following code will show that there
+are `r nrow(tibl_rnorm_1k_x_y_gt_0_num_fac)` rows and
+`r ncol(tibl_rnorm_1k_x_y_gt_0_num_fac)` columns.
+```{r second_tibble_size}
+print("number of rows in tibble:")
+nrow( tibl_rnorm_1k_x_y_gt_0_num_fac )
+print("number of columns in tibble:")
+ncol( tibl_rnorm_1k_x_y_gt_0_num_fac )
+```
+Showing the mean and median of the variable x is also simple using the functions
+bearing those precise names:
+```{r x_mean}
+mean( tibl_rnorm_1k_x_y_gt_0_num_fac$x )
+```
+
+```{r x_median}
+median( tibl_rnorm_1k_x_y_gt_0_num_fac$x )
+
+```
+
+To find the proportion of TRUE cases in the logical vector, we might do the 
+following using the table and print commands, with some basic math:
+```{r true_prop_cases_logical}
+n_true <- table(tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0) [ "TRUE" ]
+n_false <- table(tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0) [ "FALSE" ]
+prop_true <- n_true/(n_true + n_false)
+print("number true:")
+print(n_true)
+print("number false:")
+print(n_false)
+print("proportion true:")
+print(prop_true)
+```
