@@ -143,12 +143,12 @@ head(rand10_greaterthan2_letters_factor_tibl)</code></pre>
 <pre><code>## # A tibble: 6 x 4
 ##   ten_random_0_to_5 logical_greater_t~ first_ten_lette~ greater_than_two_~
 ##               &lt;dbl&gt; &lt;lgl&gt;              &lt;chr&gt;            &lt;fct&gt;             
-## 1             1.29  FALSE              a                FALSE             
-## 2             3.72  TRUE               b                TRUE              
-## 3             2.38  TRUE               c                TRUE              
-## 4             0.114 FALSE              d                FALSE             
-## 5             0.964 FALSE              e                FALSE             
-## 6             0.635 FALSE              f                FALSE</code></pre>
+## 1             2.25  TRUE               a                TRUE              
+## 2             4.89  TRUE               b                TRUE              
+## 3             0.774 FALSE              c                FALSE             
+## 4             3.03  TRUE               d                TRUE              
+## 5             4.12  TRUE               e                TRUE              
+## 6             0.368 FALSE              f                FALSE</code></pre>
 <p>Now, we’ll attempt to take the mean of all the columns… we’ll note that some of these columns are not numeric and therefore a mean would be difficult to calculate. Taking the mean of every column won’t work because means are only meaingful on numeric and integer vectors.</p>
 <pre class="r"><code> tibl_means &lt;- sapply( rand10_greaterthan2_letters_factor_tibl, mean)</code></pre>
 <pre><code>## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
@@ -156,16 +156,16 @@ head(rand10_greaterthan2_letters_factor_tibl)</code></pre>
 
 ## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
 ## returning NA</code></pre>
-<pre class="r"><code>mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )</code></pre>
-<pre><code>## [1] 1.785075</code></pre>
 <pre class="r"><code>print( tibl_means )</code></pre>
 <pre><code>##        ten_random_0_to_5 logical_greater_than_two        first_ten_letters 
-##                 1.785075                 0.400000                       NA 
+##                  2.39958                  0.60000                       NA 
 ##  greater_than_two_factor 
 ##                       NA</code></pre>
+<pre class="r"><code>mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )</code></pre>
+<pre><code>## [1] 2.39958</code></pre>
 <p>You can also take the mean of a logical TRUE/FALSE, with TRUE being automatically converted to 1 and FALSE to zero.</p>
 <pre class="r"><code>mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )</code></pre>
-<pre><code>## [1] 0.4</code></pre>
+<pre><code>## [1] 0.6</code></pre>
 <p>Taking the mean of a character vector doesn’t make sense and doesn’t work. See below.</p>
 <pre class="r"><code>mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )</code></pre>
 <pre><code>## Warning in mean.default(rand10_greaterthan2_letters_factor_tibl
@@ -189,7 +189,7 @@ tibl_means &lt;- sapply( rand10_greaterthan2_letters_factor_tibl,
                      })
  print(tibl_means)</code></pre>
 <pre><code>##            ten_random_0_to_5     logical_greater_than_two 
-##           &quot;1.78507514751982&quot; &quot;Incompatible type for mean&quot; 
+##           &quot;2.39957988180686&quot; &quot;Incompatible type for mean&quot; 
 ##            first_ten_letters      greater_than_two_factor 
 ## &quot;Incompatible type for mean&quot; &quot;Incompatible type for mean&quot;</code></pre>
 <p>Converting the logical, character, and factor columns to numeric:</p>
@@ -222,11 +222,11 @@ as.factor(rand10_greaterthan2_letters_factor_tibl$first_ten_letters)
 <div id="converting-a-factor-to-character-to-numeric." class="section level2">
 <h2>Converting a factor to character to numeric.</h2>
 <pre class="r"><code>rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor</code></pre>
-<pre><code>##  [1] FALSE TRUE  TRUE  FALSE FALSE FALSE FALSE FALSE TRUE  TRUE 
+<pre><code>##  [1] TRUE  TRUE  FALSE TRUE  TRUE  FALSE TRUE  FALSE TRUE  FALSE
 ## Levels: FALSE TRUE</code></pre>
 <pre class="r"><code>as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )</code></pre>
-<pre><code>##  [1] &quot;FALSE&quot; &quot;TRUE&quot;  &quot;TRUE&quot;  &quot;FALSE&quot; &quot;FALSE&quot; &quot;FALSE&quot; &quot;FALSE&quot; &quot;FALSE&quot;
-##  [9] &quot;TRUE&quot;  &quot;TRUE&quot;</code></pre>
+<pre><code>##  [1] &quot;TRUE&quot;  &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;  &quot;TRUE&quot;  &quot;FALSE&quot; &quot;TRUE&quot;  &quot;FALSE&quot;
+##  [9] &quot;TRUE&quot;  &quot;FALSE&quot;</code></pre>
 <pre class="r"><code>as.numeric( 
   as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
 )</code></pre>
@@ -237,6 +237,68 @@ as.factor(rand10_greaterthan2_letters_factor_tibl$first_ten_letters)
 </div>
 <div id="problem-2" class="section level1">
 <h1>Problem 2</h1>
+<p>Following directions from the assignment, I will create a data frame that has the following vectors as columns: <em>two numeric variables, x and y, <strong>both taken from a standard normal distribution </strong>(standard signifies mean 0, sd 1), </em>logical vector denoting x + y &gt; 0 <em>the logical vector coerced into a numeric vector </em>the logical vector coerced into a factor vector</p>
+<pre class="r"><code>tibl_rnorm_1k_x_y_gt_0_num_fac &lt;- tibble::tibble(
+  x = rnorm( n = 1000, mean = 0, sd = 1 ),
+  y = rnorm( n = 1000, mean = 0, sd = 1 ),
+  gt_0 = x + y &gt; 0,
+  gt_0_num = as.numeric( gt_0 ),
+  gt_0_fac = as.factor( gt_0 )
+)
+head( tibl_rnorm_1k_x_y_gt_0_num_fac )</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##         x       y gt_0  gt_0_num gt_0_fac
+##     &lt;dbl&gt;   &lt;dbl&gt; &lt;lgl&gt;    &lt;dbl&gt; &lt;fct&gt;   
+## 1  1.29    1.01   TRUE         1 TRUE    
+## 2 -0.871  -0.0631 FALSE        0 FALSE   
+## 3  0.0559 -1.55   FALSE        0 FALSE   
+## 4 -0.807   0.247  FALSE        0 FALSE   
+## 5  0.152  -1.49   FALSE        0 FALSE   
+## 6  2.24   -1.38   TRUE         1 TRUE</code></pre>
+<p>To illustrate the size of the dataset, the following code will show that there are 1000 rows and 5 columns.</p>
+<pre class="r"><code>print(&quot;number of rows in tibble:&quot; )</code></pre>
+<pre><code>## [1] &quot;number of rows in tibble:&quot;</code></pre>
+<pre class="r"><code>nrow( tibl_rnorm_1k_x_y_gt_0_num_fac )</code></pre>
+<pre><code>## [1] 1000</code></pre>
+<pre class="r"><code>print( &quot;number of columns in tibble:&quot; )</code></pre>
+<pre><code>## [1] &quot;number of columns in tibble:&quot;</code></pre>
+<pre class="r"><code>ncol( tibl_rnorm_1k_x_y_gt_0_num_fac )</code></pre>
+<pre><code>## [1] 5</code></pre>
+<p>Showing the mean and median of the variable x is also simple using the functions bearing those precise names:</p>
+<pre class="r"><code>mean( tibl_rnorm_1k_x_y_gt_0_num_fac$x )</code></pre>
+<pre><code>## [1] -0.003425591</code></pre>
+<pre class="r"><code>median( tibl_rnorm_1k_x_y_gt_0_num_fac$x )</code></pre>
+<pre><code>## [1] -0.01613124</code></pre>
+<p>To find the proportion of TRUE cases in the logical vector, we might do the following using the table and print commands, with some basic math:</p>
+<pre class="r"><code>n_true &lt;- table( tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0 ) [ &quot;TRUE&quot; ]
+n_false &lt;- table( tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0 ) [ &quot;FALSE&quot; ]
+prop_true &lt;- n_true / ( n_true + n_false )
+print( &quot;number true:&quot; )</code></pre>
+<pre><code>## [1] &quot;number true:&quot;</code></pre>
+<pre class="r"><code>print( n_true )</code></pre>
+<pre><code>## TRUE 
+##  497</code></pre>
+<pre class="r"><code>print( &quot;number false:&quot; )</code></pre>
+<pre><code>## [1] &quot;number false:&quot;</code></pre>
+<pre class="r"><code>print( n_false )</code></pre>
+<pre><code>## FALSE 
+##   503</code></pre>
+<pre class="r"><code>print( &quot;proportion true:&quot; )</code></pre>
+<pre><code>## [1] &quot;proportion true:&quot;</code></pre>
+<pre class="r"><code>print( prop_true )</code></pre>
+<pre><code>##  TRUE 
+## 0.497</code></pre>
+<p>Here’s a scatterplot of Y vs X, with the colors set by the logical vector in the data frame (or tibble, however you’d like to call it). FYI: I do in fact know how to use library function, but I prefer to use “::” notation to be in habits avoid package namespace conflicts. I’ve opted for an interactive plot here, using the plotly conversion function.</p>
+<pre class="r"><code>y_vs_x_colored_by_logical &lt;- ggplot2::ggplot(data = 
+                tibl_rnorm_1k_x_y_gt_0_num_fac,
+                ggplot2::aes(x = x,
+                y = y,
+                color = tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac)) +
+                ggplot2::geom_point() +
+                ggplot2::labs(color = &quot;x + y &gt; 0&quot;)
+print(
+  plotly::ggplotly(y_vs_x_colored_by_logical)
+)</code></pre>
 </div>
 
 

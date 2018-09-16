@@ -170,3 +170,25 @@ print( n_false )
 print( "proportion true:" )
 print( prop_true )
 ```
+Here's a scatterplot of Y vs X, with the colors set by the logical vector in
+the data frame (or tibble, however you'd like to call it).
+FYI: I do in fact know how to use library function, but I prefer to use "::"
+notation to be in habits avoid package namespace conflicts.
+I've opted for an interactive plot here, using the plotly conversion function
+instead of the print() function. Exporting the ggplot object using ggsave()
+also happens below.
+
+```{r scatterplot}
+y_vs_x_colored_by_logical <- ggplot2::ggplot(data = 
+                tibl_rnorm_1k_x_y_gt_0_num_fac,
+                ggplot2::aes(x = x,
+                y = y,
+                color = tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac)) +
+                ggplot2::geom_point() +
+                ggplot2::labs(color = "x + y > 0")
+
+  plotly::ggplotly( y_vs_x_colored_by_logical )
+  ggsave( "y_vs_x_colored_by_logical.pdf", 
+          plot = y_vs_x_colored_by_logical,
+          device = "pdf")
+```
