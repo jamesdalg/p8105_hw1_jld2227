@@ -8,36 +8,52 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Here, we're creating a tibble, essentially a data.frame, with multiple data types, numeric, logical, character, and factor making up four distinct columns.
-what didn't work:
-letters(1:5)
-"letters" is a built in vector rather than a function.
+Here, we're creating a tibble, essentially a data.frame, with multiple data
+types, numeric, logical, character, and factor making up four distinct columns.
+
 ```{r create_tibble}
 rand10_greaterthan2_letters_factor_tibl <- tibble::tibble( 
   ten_random_0_to_5 = runif(n = 10, min = 0, max=5),
   logical_greater_than_two = ten_random_0_to_5 > 2,
   first_ten_letters = letters[ 1:10 ],
-greater_than_two_factor = as.factor(logical_greater_than_two)
+greater_than_two_factor = as.factor( logical_greater_than_two )
 
 )
 head(rand10_greaterthan2_letters_factor_tibl)
 ```
 Now, we'll attempt to take the mean of all the columns... we'll note that some
 of these columns are
-not numeric and therefore a mean would be difficult to calculate.
+not numeric and therefore a mean would be difficult to calculate. Taking the 
+mean of every column won't work because means are only meaingful on numeric 
+and integer vectors.
+
 ```{r means}
-#taking the mean of every column won't work because 
-#you can't take the mean of a nonnumeric column.
  tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl, mean)
 mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )
-mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )
-mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
-mean( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
-#print(tibl_means)
+
+print( tibl_means )
 ```
-You can actually take the mean of a factor, but it's something to avoid. It is
-possible to have a factor that looks like a list of numbers that is not
-a numeric variable, Using some if logic, we find we can take just the means
+You can also take the mean of a logical TRUE/FALSE, with TRUE being
+automatically converted to 1 and FALSE to zero. 
+
+```{r mean_logical}
+mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )
+
+```
+Taking the mean of a character vector doesn't make sense and doesn't work.
+See below.
+```{r mean_letters}
+mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
+
+```
+You cannot take the mean of a factor. The error message says it all...
+it's best if you have a numeric or logical vector here.
+
+```{r mean_factor}
+mean( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
+```
+
+ Using some conditional logic, we find we can take just the means
 of the columns that are amenable to means.
 
 ```{r means_with_check}
@@ -54,7 +70,7 @@ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
  print(tibl_means)
 ```
 Converting the logical, character, and factor columns to numeric:
-```{r,eval=F}
+```{r converting_to_numeric,eval=F}
 tibl_as_num_log_char_num <-
   sapply( rand10_greaterthan2_letters_factor_tibl,
   function(x)
@@ -74,34 +90,26 @@ empty values (NAs). The logical vector can be converted to numeric...
 so this is something to watch out for and avoid if not intended.
 
 Converting character variable from character to factor to numeric:
-```{r}
+```{r char_to_fact_to_num}
+class(rand10_greaterthan2_letters_factor_tibl$first_ten_letters)
+as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) 
 as.numeric(
 as.factor(rand10_greaterthan2_letters_factor_tibl$first_ten_letters) 
 )
 ```
-This doesn't work. Why?
-Converting the character vecotr to a factor is shown below, along with 
-a conversion for the first element in the vector along with the class
-of that first element.
-```{r}
+Converting a 10 length character vector to factor generates a factor with
+10 levels of length 10. Converting this factor to numeric gives the number 
+(index) corresponding with the factor level at each position.
 
-as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) 
-  as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters[1] )
-class(
-  as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters[1] ) 
-  )
-
-```
-This generates a factor vector composed of factor <NA>s  with 0 levels...
-it is not possible to convert <NA> to numeric. 
-Converting factor variable from factor to character to numeric:
+-----
+##Converting a factor to character to numeric.
 ```{r}
+rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
 as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
 as.numeric( 
   as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
 )
 ```
-
-This does work because you can get the individual factor levels into
-a character vector and you can convert those numeral strings
-into numeric elements.
+The factor levels are appropriately converted from TRUE to "TRUE", but R doesn't
+quite know how to convert "TRUE" into a number. Each of the attempted
+conversions turn into missing values (NAs).
