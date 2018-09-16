@@ -5,34 +5,95 @@ date: "September 13, 2018"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 Here, we're creating a tibble, essentially a data.frame, with multiple data types, numeric, logical, character, and factor making up four distinct columns.
 what didn't work:
 letters(1:5)
 "letters" is a built in vector rather than a function.
-```{r create_tibble}
+
+```r
 rand10_greaterthan2_letters_factor_tibl <- tibble::tibble( 
   ten_random_0_to_5 = runif(n = 10, min = 0, max=5),
   logical_greater_than_two = ten_random_0_to_5 > 2,
   first_ten_letters = letters[ 1:10 ],
-greater_than_two_factor = as.factor(logical_greater_than_two)
+greater_than_two_factor= as.factor(logical_greater_than_two)
 
 )
 head(rand10_greaterthan2_letters_factor_tibl)
 ```
+
+```
+## # A tibble: 6 x 4
+##   ten_random_0_to_5 logical_greater_t~ first_ten_lette~ greater_than_two_~
+##               <dbl> <lgl>              <chr>            <fct>             
+## 1            3.43   TRUE               a                TRUE              
+## 2            1.14   FALSE              b                FALSE             
+## 3            2.91   TRUE               c                TRUE              
+## 4            0.585  FALSE              d                FALSE             
+## 5            0.0880 FALSE              e                FALSE             
+## 6            3.92   TRUE               f                TRUE
+```
 Now, we'll attempt to take the mean of all the columns... we'll note that some
 of these columns are
 not numeric and therefore a mean would be difficult to calculate.
-```{r means}
+
+```r
 #taking the mean of every column won't work because 
 #you can't take the mean of a nonnumeric column.
  tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl, mean)
+```
+
+```
+## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA
+
+## Warning in mean.default(X[[i]], ...): argument is not numeric or logical:
+## returning NA
+```
+
+```r
 mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )
+```
+
+```
+## [1] 2.506073
+```
+
+```r
 mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )
+```
+
+```
+## [1] 0.6
+```
+
+```r
 mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
+```
+
+```
+## Warning in mean.default(rand10_greaterthan2_letters_factor_tibl
+## $first_ten_letters): argument is not numeric or logical: returning NA
+```
+
+```
+## [1] NA
+```
+
+```r
 mean( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
+```
+
+```
+## Warning in mean.default(rand10_greaterthan2_letters_factor_tibl
+## $greater_than_two_factor): argument is not numeric or logical: returning NA
+```
+
+```
+## [1] NA
+```
+
+```r
 #print(tibl_means)
 ```
 You can actually take the mean of a factor, but it's something to avoid. It is
@@ -40,7 +101,8 @@ possible to have a factor that looks like a list of numbers that is not
 a numeric variable, Using some if logic, we find we can take just the means
 of the columns that are amenable to means.
 
-```{r means_with_check}
+
+```r
  #putting in a check to determine if it's numeric.
 tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
                      function(x)
@@ -53,8 +115,16 @@ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
                      })
  print(tibl_means)
 ```
+
+```
+##            ten_random_0_to_5     logical_greater_than_two 
+##           "2.50607258232776" "Incompatible type for mean" 
+##            first_ten_letters      greater_than_two_factor 
+## "Incompatible type for mean" "Incompatible type for mean"
+```
 Converting the logical, character, and factor columns to numeric:
-```{r,eval=F}
+
+```r
 tibl_as_num_log_char_num <-
   sapply( rand10_greaterthan2_letters_factor_tibl,
   function(x)
@@ -66,7 +136,6 @@ tibl_as_num_log_char_num <-
   return(NULL)
   })
   print( tibl_as_num_log_char_num )
-
 ```
 The logical TRUEs have been converted to 1s and the logical FALSEs have been
 converted to 0s. The letters are completely incompatible and result with 
@@ -74,34 +143,9 @@ empty values (NAs). The logical vector can be converted to numeric...
 so this is something to watch out for and avoid if not intended.
 
 Converting character variable from character to factor to numeric:
-```{r}
-as.numeric(
-as.factor(rand10_greaterthan2_letters_factor_tibl$first_ten_letters) 
-)
-```
-This doesn't work. Why?
-Converting the character vecotr to a factor is shown below, along with 
-a conversion for the first element in the vector along with the class
-of that first element.
-```{r}
 
-as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) 
-  as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters[1] )
-class(
-  as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters[1] ) 
-  )
 
-```
-This generates a factor vector composed of factor <NA>s  with 0 levels...
-it is not possible to convert <NA> to numeric. 
-Converting factor variable from factor to character to numeric:
-```{r}
-as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
-as.numeric( 
-  as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
-)
-```
 
-This does work because you can get the individual factor levels into
-a character vector and you can convert those numeral strings
-into numeric elements.
+
+
+
