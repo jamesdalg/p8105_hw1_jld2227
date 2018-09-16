@@ -8,6 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+#Problem 1
 Here, we're creating a tibble, essentially a data.frame, with multiple data
 types, numeric, logical, character, and factor making up four distinct columns.
 
@@ -29,9 +30,9 @@ and integer vectors.
 
 ```{r means}
  tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl, mean)
+print( tibl_means )
 mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )
 
-print( tibl_means )
 ```
 You can also take the mean of a logical TRUE/FALSE, with TRUE being
 automatically converted to 1 and FALSE to zero. 
@@ -89,7 +90,7 @@ converted to 0s. The letters are completely incompatible and result with
 empty values (NAs). The logical vector can be converted to numeric...
 so this is something to watch out for and avoid if not intended.
 
-Converting character variable from character to factor to numeric:
+##Converting character variable from character to factor to numeric:
 ```{r char_to_fact_to_num}
 class(rand10_greaterthan2_letters_factor_tibl$first_ten_letters)
 as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) 
@@ -103,7 +104,7 @@ Converting a 10 length character vector to factor generates a factor with
 
 -----
 ##Converting a factor to character to numeric.
-```{r}
+```{r fact_to_char_to_num}
 rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
 as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
 as.numeric( 
@@ -113,3 +114,5 @@ as.numeric(
 The factor levels are appropriately converted from TRUE to "TRUE", but R doesn't
 quite know how to convert "TRUE" into a number. Each of the attempted
 conversions turn into missing values (NAs).
+
+#Problem 2
