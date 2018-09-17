@@ -177,18 +177,46 @@ notation to be in habits avoid package namespace conflicts.
 I've opted for an interactive plot here, using the plotly conversion function
 instead of the print() function. Exporting the ggplot object using ggsave()
 also happens below.
-
-```{r scatterplot}
+The variable is used so that "tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac"
+doesn't end up in labeling.
+```{r first_scatterplot_and_save}
+greater_than_zero <- tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac
 y_vs_x_colored_by_logical <- ggplot2::ggplot(data = 
                 tibl_rnorm_1k_x_y_gt_0_num_fac,
                 ggplot2::aes(x = x,
                 y = y,
-                color = tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac)) +
+                color = greater_than_zero)) +
                 ggplot2::geom_point() +
                 ggplot2::labs(color = "x + y > 0")
 
   plotly::ggplotly( y_vs_x_colored_by_logical )
-  ggsave( "y_vs_x_colored_by_logical.pdf", 
+ ggplot2::ggsave( "y_vs_x_colored_by_logical.pdf", 
           plot = y_vs_x_colored_by_logical,
           device = "pdf")
+```
+Here is another plot with the plot colored with a numeric variable.
+Notice the continous color scale denoted by the gradient bar.
+There really are still just two colors for 0 and 1, however.
+```{r ggplot_with_num_vars}
+greater_than_zero <- tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_num
+y_vs_x_colored_by_num <- ggplot2::ggplot(data = 
+                tibl_rnorm_1k_x_y_gt_0_num_fac,
+                ggplot2::aes(x = x,
+                y = y,
+                color = greater_than_zero)) +
+                ggplot2::geom_point() +
+                ggplot2::labs(color = "x + y > 0")
+  plotly::ggplotly( y_vs_x_colored_by_num )
+```
+Here is another plot with the plot colored with a factor variable. Notice the discrete color scaling, just like the logical plot (the first one).
+```{r ggplot_with_factor_vars}
+greater_than_zero <- tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac
+y_vs_x_colored_by_factor <- ggplot2::ggplot(data = 
+                tibl_rnorm_1k_x_y_gt_0_num_fac,
+                ggplot2::aes(x = x,
+                y = y,
+                color = greater_than_zero)) +
+                ggplot2::geom_point() +
+                ggplot2::labs(color = "x + y > 0")
+  plotly::ggplotly( y_vs_x_colored_by_factor )
 ```
