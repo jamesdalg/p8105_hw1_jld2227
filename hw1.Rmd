@@ -138,15 +138,17 @@ Converting a 10 length character vector to factor generates a factor with
 -----
 ##Converting a factor to character to numeric.
 ```{r fact_to_char_to_num}
+print("factor vector:")
 rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
+print("factor vector converted to character:")
 as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
-as.numeric( 
-  as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
-)
+print("factor vector converted to character to numeric:")
+as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
+              ) %>% as.numeric( )
 ```
-The factor levels are appropriately converted from TRUE to "TRUE", but R doesn't
-quite know how to convert "TRUE" into a number. Each of the attempted
-conversions turn into missing values (NAs).
+*What happens?* The factor levels are appropriately converted from TRUE
+to "TRUE", but R doesn't quite know how to convert "TRUE" into a number.
+Each of the attempted conversions turn into missing values (NAs).
 
 #Problem 2
 Following directions from the assignment, I will create a data frame that has
