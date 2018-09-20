@@ -120,7 +120,7 @@ empty values (NAs).
 *Why?* The logical vector can be converted to numeric,
 so this is something to watch out for and avoid if not intended.
 
-##Converting character variable from character to factor to numeric:
+###Converting character variable from character to factor to numeric:
 ```{r char_to_fact_to_num}
 print( "vector class:" )
 class( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
@@ -136,7 +136,7 @@ Converting a 10 length character vector to factor generates a factor with
 (index) corresponding with the factor level at each position.
 
 -----
-##Converting a factor to character to numeric.
+###Converting a factor to character to numeric.
 ```{r fact_to_char_to_num}
 print("factor vector:")
 rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
@@ -149,16 +149,17 @@ as.character( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor
 *What happens?* The factor levels are appropriately converted from TRUE
 to "TRUE", but R doesn't quite know how to convert "TRUE" into a number.
 Each of the attempted conversions turn into missing values (NAs).
+A warning is therefore generated denoting this inability.
 
 #Problem 2
 Following directions from the assignment, I will create a data frame that has
 the following vectors as columns:
-*two numeric variables, x and y,
+*"two numeric variables, x and y,
 **both taken from a standard normal distribution
 **(standard signifies mean 0, sd 1),
 *logical vector denoting x + y > 0
 *the logical vector coerced into a numeric vector
-*the logical vector coerced into a factor vector
+*the logical vector coerced into a factor vector"
 
 
 ```{r create_second_tibble}
@@ -206,14 +207,14 @@ print( "proportion true:" )
 print( prop_true )
 ```
 Here's a scatterplot of Y vs X, with the colors set by the logical vector in
-the data frame (or tibble, however you'd like to call it).
-FYI: I do in fact know how to use library function, but I prefer to use "::"
-notation to be in habits avoid package namespace conflicts.
+the data frame (tibble).
+I prefer to use "::" notation to be in habits that avoid
+package namespace conflicts.
 I've opted for an interactive plot here, using the plotly conversion function
 instead of the print() function. Exporting the ggplot object using ggsave()
-also happens below.
-The variable is used so that "tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac"
-doesn't end up in labeling.
+also happens below to create a pdf of the plot.
+The variable "greater_than_zero"is used so that
+"tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac" doesn't end up in labeling.
 ```{r first_scatterplot_and_save}
 greater_than_zero <- tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_fac
 y_vs_x_colored_by_logical <- ggplot2::ggplot( data = 
@@ -225,12 +226,13 @@ y_vs_x_colored_by_logical <- ggplot2::ggplot( data =
                 ggplot2::labs(color = "x + y > 0")
 
   plotly::ggplotly( y_vs_x_colored_by_logical )
- ggplot2::ggsave( "y_vs_x_colored_by_logical.pdf", 
+ ggplot2::ggsave( filename =  "y_vs_x_colored_by_logical.pdf", 
           plot = y_vs_x_colored_by_logical,
           device = "pdf")
 ```
 Here is another plot with the plot colored with a numeric variable.
-Notice the continous color scale denoted by the gradient bar.
+Notice the continous color scale denoted by the gradient bar instead of
+discrete colors for each value.
 There really are still just two colors for 0 and 1, however.
 ```{r ggplot_with_num_vars}
 greater_than_zero <- tibl_rnorm_1k_x_y_gt_0_num_fac$gt_0_num
