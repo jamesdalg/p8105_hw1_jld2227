@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
 ```
 #Problem 1
 Here, we're creating a tibble (essentially a data.frame) with multiple data
@@ -22,10 +23,10 @@ greater_than_two_factor = as.factor( logical_greater_than_two )
 )
 head(rand10_greaterthan2_letters_factor_tibl)
 ```
-Now, we'll attempt to take the mean of all the columns... we'll note that some
-of these columns are
-not numeric and therefore a mean would be difficult to calculate. Taking the 
-mean of every column won't work because means are only meaingful on numeric 
+Now, we'll attempt to take the mean of all the columns one by one...
+we'll note that some of these columns are not numeric and therefore a mean 
+would be difficult to calculate. Taking the mean of every column
+won't work because means are only meaingful on numeric 
 and integer vectors.
 Please note: sapply() will apply the mean() function to each column in the
 tibble, from the first column to the last. In this case, two of these attempts
@@ -37,34 +38,53 @@ print( tibl_means )
 mean( rand10_greaterthan2_letters_factor_tibl$ten_random_0_to_5 )
 
 ```
+*What works?* Logical vectors.
 You can also take the mean of a logical TRUE/FALSE, with TRUE being
-automatically converted to 1 and FALSE to zero. 
+automatically converted to 1 and FALSE to zero. This result may not have a 
+straightforward interpretation, but it is possible.
 
 ```{r mean_logical}
 mean( rand10_greaterthan2_letters_factor_tibl$logical_greater_than_two )
 
 ```
-Taking the mean of a character vector doesn't make sense and doesn't work.
+*What doesn't?* Character vectors.
+*Why?* Taking the mean of a character vector doesn't make sense
+and doesn't work. A mean is a mathematical operation that works only on numbers
+or something that is automatically coerced to numbers.
 See below.
 ```{r mean_letters}
 mean( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
 
 ```
-You cannot take the mean of a factor. The error message says it all...
-it's best if you have a numeric or logical vector here.
+*What doesn't?* Factors, in this case.
+*Why?* You cannot take the mean of a factor. The error message says it all...
+it's best if you have a numeric or logical vector here. If you meant to take a 
+mean by coercion from character to logical to numeric, you could using the below
+code. Interpretation is not obvious, but it signifies the proportion of TRUE
+values in this case (6 out of 10 are TRUE). 
 
 ```{r mean_factor}
 mean( rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor )
 ```
+```{r mean_factor_coercion}
+rand10_greaterthan2_letters_factor_tibl$greater_than_two_factor %>%
+  as.character() %>% 
+  as.logical() %>% 
+  as.numeric() %>% 
+  mean()
+```
 
- Using some conditional logic, we find we can take just the means
+A practical application of noticing that some types are appropriate for means:
+Using some conditional logic, we find we can take just the means
 of the columns that are amenable to means.
 
 ```{r means_with_check}
  #putting in a check to determine if it's numeric.
 tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
                      function( x )
-                     if ( is.numeric( x ) ) {
+                     if ( 
+                       is.numeric( x )
+                       ) {
                      return( 
                        mean( x )
                        )
@@ -73,8 +93,11 @@ tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl,
                      })
  print(tibl_means)
 ```
-Converting the logical, character, and factor columns to numeric:
-```{r converting_to_numeric,eval=F}
+We now convert the logical, character, and factor columns to numeric.
+The results are hidden, as per instructions. If you wish to view the results to
+verify the function works, one can choose to print the results with the provided
+print function call.
+```{r converting_to_numeric,results = "hide"}
 tibl_as_num_log_char_num <-
   sapply( rand10_greaterthan2_letters_factor_tibl,
   function( x )
@@ -88,19 +111,26 @@ tibl_as_num_log_char_num <-
   print( tibl_as_num_log_char_num )
 
 ```
-The logical TRUEs have been converted to 1s and the logical FALSEs have been
-converted to 0s. The letters are completely incompatible and result with 
-empty values (NAs). The logical vector can be converted to numeric...
+*What works?*
+If you were to print the results,the logical TRUEs have been converted to 1s
+and the logical FALSEs have been converted to 0s.
+*What doesn't?*
+The letters are completely incompatible and result with 
+empty values (NAs).
+*Why?* The logical vector can be converted to numeric,
 so this is something to watch out for and avoid if not intended.
 
 ##Converting character variable from character to factor to numeric:
 ```{r char_to_fact_to_num}
-class(rand10_greaterthan2_letters_factor_tibl$first_ten_letters)
+print( "vector class:" )
+class( rand10_greaterthan2_letters_factor_tibl$first_ten_letters )
+print( "character to vector:" )
 as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) 
-as.numeric(
-as.factor(rand10_greaterthan2_letters_factor_tibl$first_ten_letters) 
-)
+print( "character to vector to numeric:" )
+as.factor( rand10_greaterthan2_letters_factor_tibl$first_ten_letters ) %>% 
+  as.numeric()
 ```
+*What happens?*
 Converting a 10 length character vector to factor generates a factor with
 10 levels of length 10. Converting this factor to numeric gives the number 
 (index) corresponding with the factor level at each position.
