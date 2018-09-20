@@ -9,8 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 #Problem 1
-Here, we're creating a tibble, essentially a data.frame, with multiple data
-types, numeric, logical, character, and factor making up four distinct columns.
+Here, we're creating a tibble (essentially a data.frame) with multiple data
+types (numeric, logical, character, and factor) making up four distinct columns.
 
 ```{r create_tibble}
 rand10_greaterthan2_letters_factor_tibl <- tibble::tibble( 
@@ -27,6 +27,9 @@ of these columns are
 not numeric and therefore a mean would be difficult to calculate. Taking the 
 mean of every column won't work because means are only meaingful on numeric 
 and integer vectors.
+Please note: sapply() will apply the mean() function to each column in the
+tibble, from the first column to the last. In this case, two of these attempts
+work while the last two fail as the type is inappropriate for taking a mean.
 
 ```{r means}
  tibl_means <- sapply( rand10_greaterthan2_letters_factor_tibl, mean)
